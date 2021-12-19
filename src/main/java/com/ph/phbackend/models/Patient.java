@@ -16,10 +16,31 @@ public class Patient {
         private Integer weight;
         private Integer height;
         private Integer age;
+        private String gender;
 
+        public Patient(String firstName, String lastName, Integer weight, Integer height, Integer age, String gender) {
+                this.firstName = firstName;
+                this.lastName = lastName;
+                this.weight = weight;
+                this.height = height;
+                this.age = age;
+                this.gender = gender;
+        }
+
+        public Patient() {
+
+        }
 
         public String getFirstName() {
                 return firstName;
+        }
+
+        public String getGender() {
+                return gender;
+        }
+
+        public void setGender(String gender) {
+                this.gender = gender;
         }
 
         public void setFirstName(String firstName) {

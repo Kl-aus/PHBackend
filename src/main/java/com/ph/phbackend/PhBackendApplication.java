@@ -11,5 +11,4 @@ public class PhBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(PhBackendApplication.class, args);
     }
-
 }

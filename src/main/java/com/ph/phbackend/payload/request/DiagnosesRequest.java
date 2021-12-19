@@ -1,4 +1,4 @@
-package com.ph.phbackend.payload;
+package com.ph.phbackend.payload.request;
 
 public class DiagnosesRequest {
     private Long diagnoses_id;

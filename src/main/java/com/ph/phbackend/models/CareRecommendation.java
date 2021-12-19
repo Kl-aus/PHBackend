@@ -3,6 +3,7 @@ package com.ph.phbackend.models;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "care_recommendation")
 public class CareRecommendation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

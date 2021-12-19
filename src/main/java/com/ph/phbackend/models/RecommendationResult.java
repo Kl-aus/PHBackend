@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "recommendation_result")
 public class RecommendationResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rec_helper_id")
+    @Column(name = "rec_helper_id")//richtige ID
     private Long recHelperId;
     private String name;
     private String author;
