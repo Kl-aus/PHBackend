@@ -15,10 +15,10 @@ public class Patient {
         private String lastName;
         private Integer weight;
         private Integer height;
-        private Integer age;
+        private String age;
         private String gender;
 
-        public Patient(String firstName, String lastName, Integer weight, Integer height, Integer age, String gender) {
+        public Patient(String firstName, String lastName, Integer weight, Integer height, String age, String gender) {
                 this.firstName = firstName;
                 this.lastName = lastName;
                 this.weight = weight;
@@ -71,11 +71,11 @@ public class Patient {
                 this.height = height;
         }
 
-        public Integer getAge() {
+        public String getAge() {
                 return age;
         }
 
-        public void setAge(Integer age) {
+        public void setAge(String age) {
                 this.age = age;
         }
 

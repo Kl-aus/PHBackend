@@ -6,7 +6,7 @@ public class PatientRequest {
     private String lastName;
     private Integer weight;
     private Integer height;
-    private Integer age;
+    private String age;
     private String gender;
 
     public String getFirstName() {
@@ -41,11 +41,11 @@ public class PatientRequest {
         this.height = height;
     }
 
-    public Integer getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
