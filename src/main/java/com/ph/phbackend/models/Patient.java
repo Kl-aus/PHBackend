@@ -1,13 +1,17 @@
 package com.ph.phbackend.models;
 
+import com.ph.phbackend.payload.request.PatientRequest;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Patient {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "id", nullable = false)
-        private Long id;
+        @Column(name = "patient_id", nullable = false)
+        private Long patientId;
 
         @Column(name = "first_name")
         private String firstName;
@@ -27,8 +31,14 @@ public class Patient {
                 this.gender = gender;
         }
 
-        public Patient() {
+        @OneToMany(fetch = FetchType.LAZY)
+        @JoinTable(name = "patient_diagnose_relation",
+                joinColumns = @JoinColumn(name = "patient_id"),
+                inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
+        private Set<Diagnose> diagnoses = new HashSet<>();
 
+
+        public Patient() {
         }
 
         public String getFirstName() {
@@ -79,11 +89,20 @@ public class Patient {
                 this.age = age;
         }
 
-        public Long getId() {
-                return id;
+        public Long getPatientId() {
+                return patientId;
         }
 
-        public void setId(Long id) {
-                this.id = id;
+        public void setPatientId(Long id) {
+                this.patientId = id;
         }
+
+        public Set<Diagnose> getDiagnoses() {
+                return diagnoses;
+        }
+
+        public void setDiagnoses(Set<Diagnose> diagnoses) {
+                this.diagnoses = diagnoses;
+        }
+
 }

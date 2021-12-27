@@ -9,6 +9,17 @@ public class PatientRequest {
     private String age;
     private String gender;
 
+    public PatientRequest() {}
+
+    public PatientRequest(String firstName, String lastName, Integer weight, Integer height, String age, String gender) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.weight = weight;
+        this.height = height;
+        this.age = age;
+        this.gender = gender;
+    }
+
     public String getFirstName() {
         return firstName;
     }

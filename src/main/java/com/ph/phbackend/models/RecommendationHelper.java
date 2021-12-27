@@ -6,7 +6,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "recommendation_result")
-public class RecommendationResult {
+public class RecommendationHelper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rec_helper_id")//richtige ID
@@ -39,10 +39,10 @@ public class RecommendationResult {
             inverseJoinColumns = @JoinColumn(name = "diagnoses_result_id"))
     private Set<CareRecommendation> recommendationsMust = new HashSet<>();
 
-    public RecommendationResult() {
+    public RecommendationHelper() {
     }
 
-    public RecommendationResult(String name, String author, Set<Diagnose> diagnoseMust, Set<Diagnose> diagnoseMustNot,
+    public RecommendationHelper(String name, String author, Set<Diagnose> diagnoseMust, Set<Diagnose> diagnoseMustNot,
                                 Set<CareRecommendation> careRecommendationMust, Set<CareRecommendation> careRecommendationMustNot) {
         this.name = name;
         this.author = author;

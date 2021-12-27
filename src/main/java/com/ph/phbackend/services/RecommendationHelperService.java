@@ -2,7 +2,7 @@ package com.ph.phbackend.services;
 
 import com.ph.phbackend.models.CareRecommendation;
 import com.ph.phbackend.models.Diagnose;
-import com.ph.phbackend.models.RecommendationResult;
+import com.ph.phbackend.models.RecommendationHelper;
 import com.ph.phbackend.repository.CareRecommendationRepository;
 import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.RecommendationHelperRepository;
@@ -52,7 +52,7 @@ public class RecommendationHelperService {
         for (Long m: reconsNot) {
             recsNot.add(careRecommendationRepository.findById(m).get());
         }
-        this.recommendationHelperRepository.save(new RecommendationResult(name, author, musts, mustNots, recs, recsNot));
+        this.recommendationHelperRepository.save(new RecommendationHelper(name, author, musts, mustNots, recs, recsNot));
     }
 
     @Transactional
