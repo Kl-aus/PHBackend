@@ -18,11 +18,13 @@ import java.util.Set;
 @Service
 public class PatientService {
     private PatientRepository patientRepository;
+    private UserRepository userRepository;
 
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, UserRepository userRepository) {
         this.patientRepository = patientRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
