@@ -8,16 +8,18 @@ public class PatientRequest {
     private Integer height;
     private String age;
     private String gender;
+    private Long userId;
 
     public PatientRequest() {}
 
-    public PatientRequest(String firstName, String lastName, Integer weight, Integer height, String age, String gender) {
+    public PatientRequest(String firstName, String lastName, Integer weight, Integer height, String age, String gender, Long userId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.weight = weight;
         this.height = height;
         this.age = age;
         this.gender = gender;
+        this.userId = userId;
     }
 
     public String getFirstName() {
@@ -66,5 +68,13 @@ public class PatientRequest {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

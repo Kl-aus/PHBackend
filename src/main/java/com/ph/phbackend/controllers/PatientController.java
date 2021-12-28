@@ -18,7 +18,10 @@ import java.util.Set;
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
+
+    @Autowired
     PatientService patientService;
+    @Autowired
     UserRepository userRepository;
 
 
@@ -28,27 +31,17 @@ public class PatientController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getPe() {
+    public ResponseEntity<?> getPatients() {
         return ResponseEntity.ok(patientService.listPatients());
     }
 
+    @GetMapping("/byId")
+    public ResponseEntity<?> getPatientsById(long id) {
+        return ResponseEntity.ok(patientService.listPatientsById(id));
+    }
+
     @PostMapping("/create")
-    public ResponseEntity<?> postPe(@Valid @RequestBody PatientRequest patientRequest, long id) {
-        Patient patient = new Patient(patientRequest.getFirstName(),
-                patientRequest.getLastName(),
-                patientRequest.getHeight(),
-                patientRequest.getWeight(),
-                patientRequest.getAge(),
-                patientRequest.getGender());
-
-        Set<Patient> patients = new HashSet<>(); // TODO: actually always just one
-        patients.add(patient);
-
-        userRepository.findById(id).ifPresent(user -> {
-            user.setPatients(patients);
-        });
-
-
-        return ResponseEntity.ok(patientService.savePatient(patient));
+    public ResponseEntity<?> create(@Valid @RequestBody PatientRequest patientRequest) {
+       return ResponseEntity.ok(patientService.createPatient(patientRequest));
     }
 }
