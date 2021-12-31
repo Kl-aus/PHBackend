@@ -36,7 +36,7 @@ public class PatientController {
     }
 
     @GetMapping("/byId")
-    public ResponseEntity<?> getPatientsById(long id) {
+    public ResponseEntity<?> getPatientsById(@Valid long id) {
         return ResponseEntity.ok(patientService.listPatientsById(id));
     }
 

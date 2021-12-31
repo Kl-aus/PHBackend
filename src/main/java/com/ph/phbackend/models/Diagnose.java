@@ -1,5 +1,4 @@
 package com.ph.phbackend.models;
-
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +13,11 @@ public class Diagnose {
 
 
     public Diagnose() {
+    }
+
+    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda) {
+        this.diagnosesId = diagnosesId;
+        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
     }
 
     public String getNursingDiagnosesNanda() {

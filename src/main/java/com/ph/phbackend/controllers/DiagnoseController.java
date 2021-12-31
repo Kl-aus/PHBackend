@@ -1,13 +1,15 @@
 package com.ph.phbackend.controllers;
 
+import com.ph.phbackend.models.Diagnose;
+import com.ph.phbackend.payload.request.DiagnosesRequest;
+import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.services.DiagnoseService;
 import com.ph.phbackend.services.RecommendationHelperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -27,9 +29,15 @@ public class DiagnoseController {
         return ResponseEntity.ok(diagnoseService.listDiagnoses());
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> getTest() {
-        this.recommendationHelperService.test();
-        return ResponseEntity.ok(diagnoseService.listDiagnoses());
+
+    @PostMapping("/savePatientDiagnoses")
+    public ResponseEntity<?> savePatientDiagnoses(@Valid @RequestBody DiagnosesRequest diagnoses) {
+        return ResponseEntity.ok(diagnoseService.savePatientDiagnoses(diagnoses));
     }
+
+    @GetMapping("/getPatientDiagnoses")
+    public ResponseEntity<?> getPatientDiagnoses(@Valid long selectedPatientId) {
+        return ResponseEntity.ok(diagnoseService.getPatientDiagnoses(selectedPatientId));
+    }
+
 }
