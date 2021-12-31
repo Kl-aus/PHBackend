@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -83,6 +84,14 @@ public class RecommendationHelperService {
 
     @Transactional
     public Set<CareRecommendation> getRecommendationsByDiagnose(DiagnosesRequest diagnoses) {
+        Set<Diagnose> diagnosesFromFrontend = diagnoses.getDiagnose();
+//        Iterator<Diagnose> it = diagnosesFromFrontend.iterator();
+//        while (it.hasNext()) {
+//
+//        }
+//        diagnosesFromFrontend.forEach((e) -> {
+//            e.getDiagnosesId();
+//        });
         return null;
     }
 }

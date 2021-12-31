@@ -59,7 +59,6 @@ public class PatientService {
             patientRepository.save(patient);
             userRepository.save(user);
         });
-
         return patient;
     }
 
