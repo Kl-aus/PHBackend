@@ -3,6 +3,7 @@ package com.ph.phbackend.services;
 import com.ph.phbackend.models.CareRecommendation;
 import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.RecommendationHelper;
+import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.repository.CareRecommendationRepository;
 import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.RecommendationHelperRepository;
@@ -78,8 +79,10 @@ public class RecommendationHelperService {
 //        recommendationResult.setDiagnosesMust(diagnoseSet);
 //        recommendationResult.setDiagnosesMustNot(diagnoseSet2);
 //        this.recommendationsHelperRepository.save(recommendationResult);
+    }
 
-
-
+    @Transactional
+    public Set<CareRecommendation> getRecommendationsByDiagnose(DiagnosesRequest diagnoses) {
+        return null;
     }
 }

@@ -31,7 +31,7 @@ public class Patient {
                 this.gender = gender;
         }
 
-        @OneToMany(fetch = FetchType.EAGER)
+        @ManyToMany(fetch = FetchType.EAGER)
         @JoinTable(name = "patient_diagnose_relation",
                 joinColumns = @JoinColumn(name = "patient_id"),
                 inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))

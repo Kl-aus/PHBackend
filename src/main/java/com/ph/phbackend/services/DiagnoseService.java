@@ -34,6 +34,7 @@ public class DiagnoseService {
         patientRepository.findById(diagnoses.getSelectedPatientId()).ifPresent(patient -> {
             Set<Diagnose> newSet = patient.getDiagnoses();
             newSet.addAll(diagnoses.getDiagnose());
+            patient.setDiagnoses(newSet);
             patientRepository.save(patient);
         });
         return diagnoses.getDiagnose();

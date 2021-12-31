@@ -1,18 +1,13 @@
 package com.ph.phbackend.controllers;
-import com.ph.phbackend.models.Patient;
-import com.ph.phbackend.models.User;
 import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.repository.UserRepository;
 import com.ph.phbackend.services.PatientService;
-import com.ph.phbackend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
