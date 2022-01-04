@@ -3,15 +3,15 @@ package com.ph.phbackend.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "care_recommendation")
-public class CareRecommendation {
+@Table(name = "nursing_measure")
+public class NursingMeasure {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "nursing_measure_id", nullable = false)
     private Long recommendationId;
-    @Column(name = "care_recommendation", nullable = true, columnDefinition = "TEXT")
+    @Column(name = "nursing_measure", nullable = true, columnDefinition = "TEXT")
     private String careRecommendation;
-    @Column(name = "care_recommendation_title", nullable = true)
+    @Column(name = "nursing_measure_title", nullable = true)
     private String careRecommendationTitle;
 
 

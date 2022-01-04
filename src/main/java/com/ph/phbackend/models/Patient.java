@@ -17,12 +17,12 @@ public class Patient {
         private String firstName;
         @Column(name = "last_name")
         private String lastName;
-        private Integer weight;
-        private Integer height;
+        private Long weight;
+        private Long height;
         private String age;
         private String gender;
 
-        public Patient(String firstName, String lastName, Integer weight, Integer height, String age, String gender) {
+        public Patient(String firstName, String lastName, Long weight, Long height, String age, String gender) {
                 this.firstName = firstName;
                 this.lastName = lastName;
                 this.weight = weight;
@@ -65,19 +65,19 @@ public class Patient {
                 this.lastName = lastName;
         }
 
-        public Integer getWeight() {
+        public Long getWeight() {
                 return weight;
         }
 
-        public void setWeight(Integer weight) {
+        public void setWeight(Long weight) {
                 this.weight = weight;
         }
 
-        public Integer getHeight() {
+        public Long getHeight() {
                 return height;
         }
 
-        public void setHeight(Integer height) {
+        public void setHeight(Long height) {
                 this.height = height;
         }
 

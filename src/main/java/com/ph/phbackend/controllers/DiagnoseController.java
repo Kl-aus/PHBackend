@@ -1,10 +1,8 @@
 package com.ph.phbackend.controllers;
 
-import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.payload.request.DiagnosesRequest;
-import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.services.DiagnoseService;
-import com.ph.phbackend.services.RecommendationHelperService;
+import com.ph.phbackend.services.NursingRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +14,12 @@ import javax.validation.Valid;
 @RequestMapping("/diagnoses")
 public class DiagnoseController {
     DiagnoseService diagnoseService;
-    RecommendationHelperService recommendationHelperService;
+    NursingRecommendationService nursingRecommendationService;
 
     @Autowired
-    public DiagnoseController(DiagnoseService diagnoseService, RecommendationHelperService recommendationHelperService) {
+    public DiagnoseController(DiagnoseService diagnoseService, NursingRecommendationService nursingRecommendationService) {
         this.diagnoseService = diagnoseService;
-        this.recommendationHelperService = recommendationHelperService;
+        this.nursingRecommendationService = nursingRecommendationService;
     }
 
     @GetMapping("/all")
