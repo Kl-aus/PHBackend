@@ -7,6 +7,7 @@ import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.repository.NursingMeasureRepository;
 import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.NursingRecommendationRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
@@ -113,8 +114,10 @@ public class NursingRecommendationService {
         for (Diagnose diagnosis : diagnoses) {
             diagnosesIdlist.add(diagnosis.getDiagnosesId());
         }
+
         if (diagnosesIdlist.size() > 0) {
-            /* Problem mit BIGINT gibt einmal Objektzurück einmal nicht --((BigInteger) reslutList.get(i)[0]).longValue() long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
+            /*
+            Problem mit BIGINT gibt einmal Objektzurück einmal nicht --((BigInteger) reslutList.get(i)[0]).longValue() long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
             Query: String q = "select nd.recommendation_id from nursing_diagnose nd group by nd.recommendation_id having group_concat(nd.diagnoses_id) in (?1)";
 
             Exception: java.lang.ClassCastException: class java.math.BigInteger cannot be cast to class [Ljava.lang.Object; (java.math.BigInteger and [Ljava.lang.Object; are in module java.base of loader 'bootstrap')
@@ -126,12 +129,16 @@ public class NursingRecommendationService {
             try {
                 List<Object[]> resultList = query.getResultList();
                 for (int i = 0; i < resultList.size(); i++) {
-                    System.out.println("RESULT LIST: " + resultList.get(i)[0]);
                     long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
+
                     Optional<NursingRecommendation> nursingRecommendation = nursingRecommendationRepository.findById(recommendationId);
+                    Hibernate.initialize(nursingRecommendation);
+
                     if(nursingRecommendation.isPresent()) {
-                        measures = nursingRecommendation.get().getNursingMeasureMust();
+                        measures.addAll(nursingRecommendation.get().getNursingMeasureMust());
+                        Hibernate.initialize(measures);
                     } else {
+                        System.out.println("no recommendations found");
                         return null;
                     }
                 }
