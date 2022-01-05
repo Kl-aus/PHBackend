@@ -3,6 +3,7 @@ package com.ph.phbackend.services;
 import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.Patient;
 import com.ph.phbackend.models.User;
+import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.repository.PatientRepository;
 import com.ph.phbackend.repository.UserRepository;
@@ -10,8 +11,11 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -73,21 +77,15 @@ public class PatientService {
         // To avoid Cascade delete & FK constraint errors delete relations manually
         Optional<Patient> patient =  patientRepository.findById(patientId);
         if(patient.isPresent()) {
-            System.out.println("########## Patient found: "+ patient.get().getPatientId());
             //Delete user-patient relation
             User user = userRepository.getById(userId);
-            System.out.println("########## User to Patient found: "+ user.getUserId());
-
             Set<Patient> patients = user.getPatients();
-            System.out.println("########## Patients from User "+ patients);
             for(Iterator<Patient> iterator = patients.iterator(); iterator.hasNext();) {
                 Long thisPatientId = iterator.next().getPatientId();
                 if (patientId == thisPatientId ) {
-                    System.out.println("########## PatientID in user-patient relation found: "+ thisPatientId);
                     iterator.remove();
                 }
             }
-            System.out.println("########## Patients from User after delete "+ patients);
             user.setPatients(patients);
             userRepository.save(user);
 
@@ -101,4 +99,18 @@ public class PatientService {
             patientRepository.delete(patient.get());
         }
     }
+    @Transactional
+    public void deletePatientDiagnoses(Set<Diagnose> diagnoses, long patientId) {
+        Patient patient = patientRepository.getById(patientId);
+        Set<Diagnose> patientDiagnoses = patient.getDiagnoses();
+        System.out.println("PATIENTENDIAGNOSEN: " + patientDiagnoses.toString());
+        System.out.println("LÖSCHDIAGNOSEN: " + diagnoses.toString());
+
+        patientDiagnoses.removeAll(diagnoses);
+        System.out.println("NACH LÖSCHEN: " + patientDiagnoses.toString());
+        patient.setDiagnoses(patientDiagnoses);
+        patientRepository.save(patient);
+    }
+
+
 }

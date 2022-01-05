@@ -1,5 +1,6 @@
 package com.ph.phbackend.models;
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "diagnose")
@@ -35,4 +36,24 @@ public class Diagnose {
     public void setDiagnosesId(Long diagnoses_id) {
         this.diagnosesId = diagnoses_id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (o == this) return true;
+        if (!(o instanceof Diagnose)) {
+            return false;
+        }
+
+        Diagnose diagnose = (Diagnose) o;
+        return diagnosesId == diagnose.diagnosesId &&
+                Objects.equals(nursingDiagnosesNanda, diagnose.nursingDiagnosesNanda);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(diagnosesId, nursingDiagnosesNanda);
+    }
+
+
 }

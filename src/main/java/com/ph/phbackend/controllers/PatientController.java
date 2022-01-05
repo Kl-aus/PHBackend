@@ -1,4 +1,5 @@
 package com.ph.phbackend.controllers;
+import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.repository.UserRepository;
 import com.ph.phbackend.services.PatientService;
@@ -44,5 +45,10 @@ public class PatientController {
     @DeleteMapping("/delete")
     public void deletePatientsById(@Valid @RequestBody PatientRequest patientRequest) {
         patientService.deletePatientsById(patientRequest.getPatientId(), patientRequest.getUserId());
+    }
+
+    @DeleteMapping("/deleteDiagnoses")
+    public void deletePatientDiagnoses(@Valid @RequestBody DiagnosesRequest diagnosesRequest) {
+        patientService.deletePatientDiagnoses(diagnosesRequest.getDiagnose(), diagnosesRequest.getSelectedPatientId());
     }
 }
