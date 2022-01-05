@@ -1,5 +1,6 @@
 package com.ph.phbackend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ph.phbackend.payload.request.PatientRequest;
 
 import javax.persistence.*;
@@ -30,8 +31,8 @@ public class Patient {
                 this.age = age;
                 this.gender = gender;
         }
-
-        @ManyToMany(fetch = FetchType.EAGER)
+        @JsonIgnore
+        @ManyToMany
         @JoinTable(name = "patient_diagnose_relation",
                 joinColumns = @JoinColumn(name = "patient_id"),
                 inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))

@@ -1,19 +1,18 @@
 package com.ph.phbackend.services;
 
+import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.Patient;
 import com.ph.phbackend.models.User;
 import com.ph.phbackend.payload.request.PatientRequest;
 import com.ph.phbackend.repository.PatientRepository;
 import com.ph.phbackend.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class PatientService {
@@ -35,7 +34,13 @@ public class PatientService {
     @Transactional
     public Set<Patient> listPatientsById(long id) {
         Optional<User> user =  userRepository.findById(id);
-        return user.map(User::getPatients).orElse(null);
+        if(user.isPresent()) {
+            Set<Patient> patients = user.get().getPatients();
+            Hibernate.initialize(patients);
+            return patients;
+        } else {
+            return null;
+        }
     }
 
     @Transactional
@@ -56,12 +61,44 @@ public class PatientService {
         userRepository.findById(patientRequest.getUserId()).ifPresent(user -> {
             Set<Patient> patients = user.getPatients();
             patients.add(patient);
+            Hibernate.initialize(patients);
             patientRepository.save(patient);
             userRepository.save(user);
         });
         return patient;
     }
 
+    @Transactional
+    public void deletePatientsById(long patientId, long userId) {
+        // To avoid Cascade delete & FK constraint errors delete relations manually
+        Optional<Patient> patient =  patientRepository.findById(patientId);
+        if(patient.isPresent()) {
+            System.out.println("########## Patient found: "+ patient.get().getPatientId());
+            //Delete user-patient relation
+            User user = userRepository.getById(userId);
+            System.out.println("########## User to Patient found: "+ user.getUserId());
 
+            Set<Patient> patients = user.getPatients();
+            System.out.println("########## Patients from User "+ patients);
+            for(Iterator<Patient> iterator = patients.iterator(); iterator.hasNext();) {
+                Long thisPatientId = iterator.next().getPatientId();
+                if (patientId == thisPatientId ) {
+                    System.out.println("########## PatientID in user-patient relation found: "+ thisPatientId);
+                    iterator.remove();
+                }
+            }
+            System.out.println("########## Patients from User after delete "+ patients);
+            user.setPatients(patients);
+            userRepository.save(user);
 
+            //clear patient-diagnoses relation
+            Set<Diagnose> diagnoses = patient.get().getDiagnoses();
+            diagnoses.clear();
+            patient.get().setDiagnoses(diagnoses);
+            patientRepository.save(patient.get());
+
+            //Delete Patient
+            patientRepository.delete(patient.get());
+        }
+    }
 }

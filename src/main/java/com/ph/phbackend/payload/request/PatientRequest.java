@@ -1,5 +1,9 @@
 package com.ph.phbackend.payload.request;
 
+import com.ph.phbackend.models.Patient;
+
+import java.util.Set;
+
 public class PatientRequest {
 
     private String firstName;
@@ -9,10 +13,12 @@ public class PatientRequest {
     private String age;
     private String gender;
     private Long userId;
+    private Set<Patient> patients;
+    private Long patientId;
 
     public PatientRequest() {}
 
-    public PatientRequest(String firstName, String lastName, Long weight, Long height, String age, String gender, Long userId) {
+    public PatientRequest(String firstName, String lastName, Long weight, Long height, String age, String gender, Long userId, Set<Patient> patients, Long patientId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.weight = weight;
@@ -20,6 +26,8 @@ public class PatientRequest {
         this.age = age;
         this.gender = gender;
         this.userId = userId;
+        this.patients = patients;
+        this.patientId = patientId;
     }
 
     public String getFirstName() {
@@ -76,5 +84,21 @@ public class PatientRequest {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Set<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
     }
 }

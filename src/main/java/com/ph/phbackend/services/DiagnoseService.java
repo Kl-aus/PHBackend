@@ -5,6 +5,7 @@ import com.ph.phbackend.models.Patient;
 import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.PatientRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -34,6 +35,7 @@ public class DiagnoseService {
         patientRepository.findById(diagnoses.getSelectedPatientId()).ifPresent(patient -> {
             Set<Diagnose> newSet = patient.getDiagnoses();
             newSet.addAll(diagnoses.getDiagnose());
+            Hibernate.initialize(newSet);
             patient.setDiagnoses(newSet);
             patientRepository.save(patient);
         });
@@ -42,8 +44,16 @@ public class DiagnoseService {
 
     @Transactional
     public Set<Diagnose> getPatientDiagnoses(long selectedPatientId) {
-          Optional<Patient> patient = patientRepository.findById(selectedPatientId);
-        return patient.map(Patient::getDiagnoses).orElse(null);
+        Set<Diagnose> diagnoses = new HashSet<>();
+        Optional<Patient> patient = patientRepository.findById(selectedPatientId);
+        if(patient.isPresent()) {
+            diagnoses = patient.get().getDiagnoses();
+            Hibernate.initialize(diagnoses);
+            return diagnoses;
+        } else {
+            return null;
+        }
+//        return patient.map(Patient::getDiagnoses).orElse(null);
     }
 }
 
