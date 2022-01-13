@@ -9,7 +9,8 @@ public class NursingMeasure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nursing_measure_id", nullable = false)
     private Long recommendationId;
-    @Column(name = "nursing_measure", nullable = true, columnDefinition = "TEXT")
+    @Lob
+    @Column(name = "nursing_measure", nullable = true)
     private String careRecommendation;
     @Column(name = "nursing_measure_title", nullable = true)
     private String careRecommendationTitle;

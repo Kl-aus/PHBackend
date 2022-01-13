@@ -11,14 +11,17 @@ public class Diagnose {
     private Long diagnosesId;
     @Column(name = "nursing_diagnoses_nanda", nullable = false)
     private String nursingDiagnosesNanda;
-
+    @Lob
+    @Column(name = "nursing_diagnoses_description")
+    private String nursingDiagnosesDescription;
 
     public Diagnose() {
     }
 
-    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda) {
+    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda, String nursingDiagnosesDescription) {
         this.diagnosesId = diagnosesId;
         this.nursingDiagnosesNanda = nursingDiagnosesNanda;
+        this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
     public String getNursingDiagnosesNanda() {
@@ -27,6 +30,14 @@ public class Diagnose {
 
     public void setNursingDiagnosesNanda(String nursing_diagnoses_nanda) {
         this.nursingDiagnosesNanda = nursing_diagnoses_nanda;
+    }
+
+    public String getNursingDiagnosesDescription() {
+        return nursingDiagnosesDescription;
+    }
+
+    public void setNursingDiagnosesDescription(String nursingDiagnosesDescription) {
+        this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
     public Long getDiagnosesId() {
