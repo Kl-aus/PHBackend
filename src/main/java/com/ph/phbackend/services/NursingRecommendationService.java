@@ -44,67 +44,70 @@ public class NursingRecommendationService {
 
     @Transactional
     public NursingRecommendation setTestRecommendation()  {
-//        NursingRecommendation recommendation = new NursingRecommendation();
-//
-//        Diagnose diagnose = new Diagnose();
-//        diagnose.setNursingDiagnosesNanda("TestDiagnose2");
-//        this.diagnoseRepository.save(diagnose);
-//
-//        Diagnose diagnose2 = new Diagnose();
-//        diagnose2.setNursingDiagnosesNanda("TestDiagnose3");
-//        this.diagnoseRepository.save(diagnose2);
-//
-//        Diagnose diagnose3 = new Diagnose();
-//        diagnose3.setNursingDiagnosesNanda("TestDiagnose4");
-//        this.diagnoseRepository.save(diagnose3);
-//
-//        Diagnose diagnose4 = new Diagnose();
-//        diagnose4.setNursingDiagnosesNanda("TestDiagnose5");
-//        this.diagnoseRepository.save(diagnose4);
-//
-//
-//        // add if does not exist, search and add if exists
-//        NursingMeasure measure = new NursingMeasure();
-//        measure.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
-//        measure.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel");
-//        this.nursingMeasureRepository.save(measure);
-//
-//        NursingMeasure measure2 = new NursingMeasure();
-//        measure2.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
-//        measure2.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel3");
-//        this.nursingMeasureRepository.save(measure2);
-//
-//        // add if does not exist, search and add if exists
-//        NursingMeasure dont = new NursingMeasure();
-//        dont.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin auch hinzu");
-//        dont.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel2");
-//        this.nursingMeasureRepository.save(dont);
-//
-//        Set<Diagnose> diagnoses = new HashSet<>();
-//        diagnoses.add(diagnose);
-//        diagnoses.add(diagnose2);
-//        diagnoses.add(diagnose3);
-//        diagnoses.add(diagnose4);
-//
-//        recommendation.setDiagnosesMust(diagnoses);
-//
-//        Set<NursingMeasure> nursingMeasureSetMust = new HashSet<>();
-//        nursingMeasureSetMust.add(measure);
-//        nursingMeasureSetMust.add(measure2);
-//
-//        recommendation.setNursingMeasureMust(nursingMeasureSetMust);
-//
-//        Set<NursingMeasure> nursingMeasureSetMustNot = new HashSet<>();
-//        nursingMeasureSetMustNot.add(dont);
-//        recommendation.setNursingMeasureMustNot(nursingMeasureSetMustNot);
-//
-//
-//        recommendation.setAuthor("PflegeHeute");
-//        recommendation.setName("Kevin");
-//
-//        this.nursingRecommendationRepository.save(recommendation);
-//        return recommendation;
-        return null;
+        NursingRecommendation recommendation = new NursingRecommendation();
+
+        Diagnose diagnose = new Diagnose();
+        diagnose.setNursingDiagnosesNanda("TestDiagnose2");
+        diagnose.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
+        this.diagnoseRepository.save(diagnose);
+
+        Diagnose diagnose2 = new Diagnose();
+        diagnose2.setNursingDiagnosesNanda("TestDiagnose3");
+        diagnose2.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
+        this.diagnoseRepository.save(diagnose2);
+
+        Diagnose diagnose3 = new Diagnose();
+        diagnose3.setNursingDiagnosesNanda("TestDiagnose4");
+        diagnose3.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
+        this.diagnoseRepository.save(diagnose3);
+
+        Diagnose diagnose4 = new Diagnose();
+        diagnose4.setNursingDiagnosesNanda("TestDiagnose5");
+        diagnose4.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
+        this.diagnoseRepository.save(diagnose4);
+
+
+        // add if does not exist, search and add if exists
+        NursingMeasure measure = new NursingMeasure();
+        measure.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
+        measure.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel");
+        this.nursingMeasureRepository.save(measure);
+
+        NursingMeasure measure2 = new NursingMeasure();
+        measure2.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
+        measure2.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel3");
+        this.nursingMeasureRepository.save(measure2);
+
+        // add if does not exist, search and add if exists
+        NursingMeasure dont = new NursingMeasure();
+        dont.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin auch hinzu");
+        dont.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel2");
+        this.nursingMeasureRepository.save(dont);
+
+        Set<Diagnose> diagnoses = new HashSet<>();
+        diagnoses.add(diagnose);
+        diagnoses.add(diagnose2);
+        diagnoses.add(diagnose3);
+        diagnoses.add(diagnose4);
+
+        recommendation.setDiagnosesMust(diagnoses);
+
+        Set<NursingMeasure> nursingMeasureSetMust = new HashSet<>();
+        nursingMeasureSetMust.add(measure);
+        nursingMeasureSetMust.add(measure2);
+
+        recommendation.setNursingMeasureMust(nursingMeasureSetMust);
+
+        Set<NursingMeasure> nursingMeasureSetMustNot = new HashSet<>();
+        nursingMeasureSetMustNot.add(dont);
+        recommendation.setNursingMeasureMustNot(nursingMeasureSetMustNot);
+
+
+        recommendation.setAuthor("PflegeHeute");
+        recommendation.setName("Kevin");
+
+        this.nursingRecommendationRepository.save(recommendation);
+        return recommendation;
     }
 
 

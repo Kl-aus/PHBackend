@@ -32,6 +32,7 @@ public class DiagnoseService {
 
     @Transactional
     public Set<Diagnose> savePatientDiagnoses(DiagnosesRequest diagnoses) {
+        System.out.println("SavePatientDiagnoses();");
         patientRepository.findById(diagnoses.getSelectedPatientId()).ifPresent(patient -> {
             Set<Diagnose> newSet = patient.getDiagnoses();
             newSet.addAll(diagnoses.getDiagnose());
@@ -44,6 +45,7 @@ public class DiagnoseService {
 
     @Transactional
     public Set<Diagnose> getPatientDiagnoses(long selectedPatientId) {
+        System.out.println("GetPatientDiagnoses();");
         Set<Diagnose> diagnoses = new HashSet<>();
         Optional<Patient> patient = patientRepository.findById(selectedPatientId);
         if(patient.isPresent()) {

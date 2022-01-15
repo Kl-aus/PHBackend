@@ -2,6 +2,7 @@ package com.ph.phbackend.payload.request;
 
 import com.ph.phbackend.models.Diagnose;
 
+import java.io.Serializable;
 import java.util.Set;
 
 public class DiagnosesRequest {

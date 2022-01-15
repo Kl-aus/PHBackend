@@ -101,6 +101,7 @@ public class PatientService {
     }
     @Transactional
     public void deletePatientDiagnoses(Set<Diagnose> diagnoses, long patientId) {
+        System.out.println("DeletePatientDiagnoses();");
         Patient patient = patientRepository.getById(patientId);
         Set<Diagnose> patientDiagnoses = patient.getDiagnoses();
         System.out.println("PATIENTENDIAGNOSEN: " + patientDiagnoses.toString());
