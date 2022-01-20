@@ -23,8 +23,6 @@ public class NursingRecommendation {
         inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
     private Set<Diagnose> nursingDiagnose;
 
-
-
 //    @ManyToMany
 //    @JoinTable(name = "diagnose_must_not",
 //            joinColumns = @JoinColumn(name = "rec_helper_id"),
@@ -51,7 +49,7 @@ public class NursingRecommendation {
         this.name = name;
         this.author = author;
         this.nursingDiagnose = nursingDiagnose;
-//        this.diagnoseMustNot = diagnoseMustNot;
+//      this.diagnoseMustNot = diagnoseMustNot;
         this.nursingMeasureMustNot = nursingMeasureMustNot;
         this.nursingMeasureMust = nursingMeasureMust;
     }

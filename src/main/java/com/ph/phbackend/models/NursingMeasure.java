@@ -10,9 +10,9 @@ public class NursingMeasure {
     @Column(name = "nursing_measure_id", nullable = false)
     private Long recommendationId;
     @Lob
-    @Column(name = "nursing_measure", nullable = true)
+    @Column(name = "nursing_measure")
     private String careRecommendation;
-    @Column(name = "nursing_measure_title", nullable = true)
+    @Column(name = "nursing_measure_title")
     private String careRecommendationTitle;
 
 

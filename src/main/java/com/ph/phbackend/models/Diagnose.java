@@ -18,6 +18,11 @@ public class Diagnose {
     public Diagnose() {
     }
 
+    public Diagnose(String nursingDiagnosesNanda, String nursingDiagnosesDescription) {
+        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
+        this.nursingDiagnosesDescription = nursingDiagnosesDescription;
+    }
+
     public Diagnose(Long diagnosesId, String nursingDiagnosesNanda, String nursingDiagnosesDescription) {
         this.diagnosesId = diagnosesId;
         this.nursingDiagnosesNanda = nursingDiagnosesNanda;
