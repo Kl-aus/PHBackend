@@ -3,7 +3,6 @@ package com.ph.phbackend.services;
 import com.ph.phbackend.models.NursingMeasure;
 import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.NursingRecommendation;
-import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.payload.request.RecommendationRequest;
 import com.ph.phbackend.repository.NursingMeasureRepository;
 import com.ph.phbackend.repository.DiagnoseRepository;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
-import java.math.BigInteger;
-import java.sql.Array;
 import java.util.*;
 
 @Service
@@ -115,38 +112,46 @@ public class NursingRecommendationService {
     @Transactional
     public Set<NursingMeasure> getRecommendationsByDiagnose(Set<Diagnose> diagnoses) {
         Set<NursingMeasure> measures  = new HashSet<>();
+        Hibernate.initialize(measures);
+
         List<Long> diagnosesIdlist = new ArrayList<>();
         for (Diagnose diagnosis : diagnoses) {
             diagnosesIdlist.add(diagnosis.getDiagnosesId());
         }
 
         if (diagnosesIdlist.size() > 0) {
-            /*
-            Problem mit BIGINT gibt einmal Objektzurück einmal nicht --((BigInteger) reslutList.get(i)[0]).longValue() long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
-            Query: String q = "select nd.recommendation_id from nursing_diagnose nd group by nd.recommendation_id having group_concat(nd.diagnoses_id) in (?1)";
-
-            Exception: java.lang.ClassCastException: class java.math.BigInteger cannot be cast to class [Ljava.lang.Object; (java.math.BigInteger and [Ljava.lang.Object; are in module java.base of loader 'bootstrap')
-            */
-            String q = "select nd.recommendation_id, group_concat(nd.diagnoses_id) as diagnoses from nursing_diagnose nd group by nd.recommendation_id having diagnoses in (?1)";
+            //String q = "select nd.recommendation_id, group_concat(nd.diagnoses_id) as diagnoses from nursing_diagnose nd group by nd.recommendation_id having diagnoses in (?1)";
+            //select unique nursing_measure_id from nursing_measure_must where recommendation_id in(select unique recommendation_id from nursing_diagnose where diagnoses_id in (97,3)) not in ...
+            String q = "select unique nursing_measure_id from nursing_measure_must where recommendation_id in(select unique recommendation_id from nursing_diagnose where diagnoses_id in (?1))";
             Query query = entityManager.createNativeQuery(q);
             query.setParameter(1, diagnosesIdlist);
 
             try {
                 List<Object[]> resultList = query.getResultList();
                 for (int i = 0; i < resultList.size(); i++) {
-                    long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
-
-                    Optional<NursingRecommendation> nursingRecommendation = nursingRecommendationRepository.findById(recommendationId);
-                    Hibernate.initialize(nursingRecommendation);
-
-                    if (nursingRecommendation.isPresent()) {
-                        measures.addAll(nursingRecommendation.get().getNursingMeasureMust());
-                        Hibernate.initialize(measures);
+                    long nursingMeasureId = Long.parseLong(String.valueOf(resultList.get(i)));
+                    Optional<NursingMeasure> nursingMeasure = nursingMeasureRepository.findById(nursingMeasureId);
+                    if (nursingMeasure.isPresent()) {
+                        Hibernate.initialize(nursingMeasure.get().getImages());
+                        measures.add(nursingMeasure.get()); // get all measures from recommendation
                     } else {
-                        System.out.println("no recommendations found");
+                        System.out.println("recommendation not found");
                         return null;
                     }
                 }
+//                for (int i = 0; i < resultList.size(); i++) {
+//                    long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
+//                    Optional<NursingRecommendation> nursingRecommendation = nursingRecommendationRepository.findById(recommendationId);
+//                    Hibernate.initialize(nursingRecommendation);
+//
+//                   if (nursingRecommendation.isPresent()) {
+//                        measures.addAll(nursingRecommendation.get().getNursingMeasureMust()); // get all measures from recommendation
+//                        Hibernate.initialize(measures);
+//                    } else {
+//                        System.out.println("no recommendations found");
+//                        return null;
+//                    }
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -159,24 +164,19 @@ public class NursingRecommendationService {
 
     @Transactional
     public Object saveRecommendation(RecommendationRequest recommendation) {
-        try {
-            this.nursingMeasureRepository.saveAll(recommendation.getNursingMeasures());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
+        this.nursingMeasureRepository.save(recommendation.getNursingMeasure());
         Diagnose diagnose = new Diagnose(recommendation.getNursingDiagnosesNanda(), recommendation.getNursingDiagnosesDescription());
-        this.nursingMeasureRepository.saveAll(recommendation.getNursingMeasures());
         this.diagnoseRepository.save(diagnose);
         Set<Diagnose> thisDiagnose = new HashSet<>();
         thisDiagnose.add(diagnose);
-        NursingRecommendation thisRecommendation = new NursingRecommendation();
 
+        NursingRecommendation thisRecommendation = new NursingRecommendation();
         thisRecommendation.setAuthor(recommendation.getAuthor());
         thisRecommendation.setName(recommendation.getName());
         thisRecommendation.setDiagnosesMust(thisDiagnose);
-        thisRecommendation.setNursingMeasureMust(recommendation.getNursingMeasures());
+        Set<NursingMeasure> nursingMeasures = new HashSet<>();
+        nursingMeasures.add(recommendation.getNursingMeasure());
+        thisRecommendation.setNursingMeasureMust(nursingMeasures);
         //thisRecommendation.setNursingMeasureMustNot();
 
         try {

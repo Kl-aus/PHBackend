@@ -1,6 +1,8 @@
 package com.ph.phbackend.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "nursing_measure")
@@ -14,6 +16,20 @@ public class NursingMeasure {
     private String careRecommendation;
     @Column(name = "nursing_measure_title")
     private String careRecommendationTitle;
+
+    public NursingMeasure() {
+    }
+
+    public NursingMeasure(String careRecommendation, String careRecommendationTitle) {
+        this.careRecommendation = careRecommendation;
+        this.careRecommendationTitle = careRecommendationTitle;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "measure_image_relation",
+            joinColumns = @JoinColumn(name = "nursing_measure_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id"))
+    private Set<Images> images = new HashSet<>();
 
 
     public String getCareRecommendation() {
@@ -38,5 +54,13 @@ public class NursingMeasure {
 
     public void setRecommendationId(Long id) {
         this.recommendationId = id;
+    }
+
+    public Set<Images> getImages() {
+        return images;
+    }
+
+    public void setImages(Set<Images> images) {
+        this.images = images;
     }
 }

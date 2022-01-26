@@ -31,6 +31,7 @@ public class Patient {
                 this.age = age;
                 this.gender = gender;
         }
+
         @JsonIgnore
         @ManyToMany
         @JoinTable(name = "patient_diagnose_relation",

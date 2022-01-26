@@ -1,8 +1,6 @@
 package com.ph.phbackend.payload.request;
 
-import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.NursingMeasure;
-import com.ph.phbackend.models.NursingRecommendation;
 
 import java.util.Set;
 
@@ -14,17 +12,17 @@ public class RecommendationRequest {
     private String nursingDiagnosesNanda;
     private String nursingDiagnosesDescription;
 
-    private Set<NursingMeasure> nursingMeasures;
+    private NursingMeasure nursingMeasure;
 
     public RecommendationRequest() {
     }
 
-    public RecommendationRequest(String name, String author, String nursingDiagnosesNanda, String nursingDiagnosesDescription, Set<NursingMeasure> nursingMeasures) {
+    public RecommendationRequest(String name, String author, String nursingDiagnosesNanda, String nursingDiagnosesDescription, NursingMeasure nursingMeasure) {
         this.name = name;
         this.author = author;
         this.nursingDiagnosesNanda = nursingDiagnosesNanda;
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
-        this.nursingMeasures = nursingMeasures;
+        this.nursingMeasure = nursingMeasure;
     }
 
     public String getName() {
@@ -59,11 +57,11 @@ public class RecommendationRequest {
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
-    public Set<NursingMeasure> getNursingMeasures() {
-        return nursingMeasures;
+    public NursingMeasure getNursingMeasure() {
+        return nursingMeasure;
     }
 
-    public void setNursingMeasures(Set<NursingMeasure> nursingMeasures) {
-        this.nursingMeasures = nursingMeasures;
+    public void setNursingMeasure(NursingMeasure nursingMeasure) {
+        this.nursingMeasure = nursingMeasure;
     }
 }

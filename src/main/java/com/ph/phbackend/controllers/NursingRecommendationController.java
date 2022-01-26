@@ -4,6 +4,7 @@ package com.ph.phbackend.controllers;
 import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.NursingRecommendation;
 import com.ph.phbackend.payload.request.DiagnosesRequest;
+import com.ph.phbackend.payload.request.ImageRequest;
 import com.ph.phbackend.payload.request.RecommendationRequest;
 import com.ph.phbackend.services.NursingRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class NursingRecommendationController {
     public ResponseEntity<?> saveRecommendation(@Valid @RequestBody RecommendationRequest recommendation) {
         return ResponseEntity.ok(nursingRecommendationService.saveRecommendation(recommendation));
     }
+
 //    @GetMapping("/setTest")
 //    public ResponseEntity<?> setTest() {
 //        return ResponseEntity.ok(nursingRecommendationService.setTestRecommendation());
