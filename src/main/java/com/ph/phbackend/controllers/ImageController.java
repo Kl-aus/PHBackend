@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequestMapping("/files")
 public class ImageController {
     private static final String UPLOADED_FOLDER = "/home/phBackend/images";
-    private static final String UPLOADED_FOLDER_WIN = "C:\\Users\\Klaus\\Desktop\\images\\";
+    //private static final String UPLOADED_FOLDER_WIN = "C:\\Users\\Klaus\\Desktop\\images\\";
 
     @Autowired
     ImageService imageService;
