@@ -122,7 +122,7 @@ public class NursingRecommendationService {
         if (diagnosesIdlist.size() > 0) {
             //String q = "select nd.recommendation_id, group_concat(nd.diagnoses_id) as diagnoses from nursing_diagnose nd group by nd.recommendation_id having diagnoses in (?1)";
             //select unique nursing_measure_id from nursing_measure_must where recommendation_id in(select unique recommendation_id from nursing_diagnose where diagnoses_id in (97,3)) not in ...
-            String q = "select unique nursing_measure_id from nursing_measure_must where recommendation_id in(select unique recommendation_id from nursing_diagnose where diagnoses_id in (?1))";
+            String q = "select distinct nursing_measure_id from nursing_measure_must where recommendation_id in(select distinct recommendation_id from nursing_diagnose where diagnoses_id in (?1))";
             Query query = entityManager.createNativeQuery(q);
             query.setParameter(1, diagnosesIdlist);
 
