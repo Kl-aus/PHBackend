@@ -60,12 +60,10 @@ public class ImageService {
             return null;
         }
     }
-    @Transactional
+
     public InputStreamResource getImages(String filename) {
         try {
             FileInputStream is = new FileInputStream( UPLOAD_FOLDER + filename );
-
-            //final InputStream in = ImageService.class.getResourceAsStream(UPLOAD_FOLDER_WIN + filename);
             return new InputStreamResource(is);
         } catch (Exception e) {
             e.printStackTrace();

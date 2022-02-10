@@ -15,6 +15,10 @@ public class Diagnose {
     @Column(name = "nursing_diagnoses_description")
     private String nursingDiagnosesDescription;
 
+    @ManyToOne
+    @JoinColumn(name="anamnesis_id")
+    private Anamnesis anamnesis;
+
     public Diagnose() {
     }
 

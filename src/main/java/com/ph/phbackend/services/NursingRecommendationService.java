@@ -3,10 +3,12 @@ package com.ph.phbackend.services;
 import com.ph.phbackend.models.NursingMeasure;
 import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.NursingRecommendation;
+import com.ph.phbackend.models.Patient;
 import com.ph.phbackend.payload.request.RecommendationRequest;
 import com.ph.phbackend.repository.NursingMeasureRepository;
 import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.NursingRecommendationRepository;
+import com.ph.phbackend.repository.PatientRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -25,98 +27,38 @@ public class NursingRecommendationService {
     NursingRecommendationRepository nursingRecommendationRepository;
     DiagnoseRepository diagnoseRepository;
     NursingMeasureRepository nursingMeasureRepository;
+    PatientRepository patientRepository;
 
     @Autowired
     public NursingRecommendationService(NursingRecommendationRepository nursingRecommendationRepository,
                                         DiagnoseRepository diagnoseRepository,
                                         NursingMeasureRepository nursingMeasureRepository,
+                                        PatientRepository patientRepository,
                                         LocalContainerEntityManagerFactoryBean transactionManager) {
         this.nursingRecommendationRepository = nursingRecommendationRepository;
         this.diagnoseRepository = diagnoseRepository;
         this.nursingMeasureRepository = nursingMeasureRepository;
         this.transactionManager = transactionManager;
+        this.patientRepository = patientRepository;
     }
 
-
-
-
-//    @Transactional
-//    public NursingRecommendation setTestRecommendation()  {
-//        NursingRecommendation recommendation = new NursingRecommendation();
-//
-//        Diagnose diagnose = new Diagnose();
-//        diagnose.setNursingDiagnosesNanda("TestDiagnose2");
-//        diagnose.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
-//        this.diagnoseRepository.save(diagnose);
-//
-//        Diagnose diagnose2 = new Diagnose();
-//        diagnose2.setNursingDiagnosesNanda("TestDiagnose3");
-//        diagnose2.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
-//        this.diagnoseRepository.save(diagnose2);
-//
-//        Diagnose diagnose3 = new Diagnose();
-//        diagnose3.setNursingDiagnosesNanda("TestDiagnose4");
-//        diagnose3.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
-//        this.diagnoseRepository.save(diagnose3);
-//
-//        Diagnose diagnose4 = new Diagnose();
-//        diagnose4.setNursingDiagnosesNanda("TestDiagnose5");
-//        diagnose4.setNursingDiagnosesDescription("TestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesTTestTEstTestteSttesT");
-//        this.diagnoseRepository.save(diagnose4);
-//
-//
-//        // add if does not exist, search and add if exists
-//        NursingMeasure measure = new NursingMeasure();
-//        measure.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
-//        measure.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel");
-//        this.nursingMeasureRepository.save(measure);
-//
-//        NursingMeasure measure2 = new NursingMeasure();
-//        measure2.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin hinzu");
-//        measure2.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel3");
-//        this.nursingMeasureRepository.save(measure2);
-//
-//        // add if does not exist, search and add if exists
-//        NursingMeasure dont = new NursingMeasure();
-//        dont.setCareRecommendation("Diese Pflegeempfehlung fügt der Kevin auch hinzu");
-//        dont.setCareRecommendationTitle("Kevin´s Pflegeempehlungs Titel2");
-//        this.nursingMeasureRepository.save(dont);
-//
-//        Set<Diagnose> diagnoses = new HashSet<>();
-//        diagnoses.add(diagnose);
-//        diagnoses.add(diagnose2);
-//        diagnoses.add(diagnose3);
-//        diagnoses.add(diagnose4);
-//
-//        recommendation.setDiagnosesMust(diagnoses);
-//
-//        Set<NursingMeasure> nursingMeasureSetMust = new HashSet<>();
-//        nursingMeasureSetMust.add(measure);
-//        nursingMeasureSetMust.add(measure2);
-//
-//        recommendation.setNursingMeasureMust(nursingMeasureSetMust);
-//
-//        Set<NursingMeasure> nursingMeasureSetMustNot = new HashSet<>();
-//        nursingMeasureSetMustNot.add(dont);
-//        recommendation.setNursingMeasureMustNot(nursingMeasureSetMustNot);
-//
-//
-//        recommendation.setAuthor("PflegeHeute");
-//        recommendation.setName("Kevin");
-//
-//        this.nursingRecommendationRepository.save(recommendation);
-//        return recommendation;
-//    }
-
-
     @Transactional
-    public Set<NursingMeasure> getRecommendationsByDiagnose(Set<Diagnose> diagnoses) {
+    public Set<NursingMeasure> getRecommendationsByPatient(long id) {
         Set<NursingMeasure> measures  = new HashSet<>();
         Hibernate.initialize(measures);
+        Set<Diagnose> diagnoses = null;
+
+        Optional<Patient> patient =  patientRepository.findById(id);
+        if(patient.isPresent()) {
+            diagnoses = patient.get().getDiagnoses();
+            Hibernate.initialize(diagnoses);
+        }
 
         List<Long> diagnosesIdlist = new ArrayList<>();
-        for (Diagnose diagnosis : diagnoses) {
-            diagnosesIdlist.add(diagnosis.getDiagnosesId());
+        if (diagnoses != null) {
+            for (Diagnose diagnosis : diagnoses) {
+                diagnosesIdlist.add(diagnosis.getDiagnosesId());
+            }
         }
 
         if (diagnosesIdlist.size() > 0) {

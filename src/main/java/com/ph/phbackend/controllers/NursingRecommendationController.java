@@ -1,20 +1,14 @@
 package com.ph.phbackend.controllers;
 
 
-import com.ph.phbackend.models.Diagnose;
-import com.ph.phbackend.models.NursingRecommendation;
-import com.ph.phbackend.payload.request.DiagnosesRequest;
-import com.ph.phbackend.payload.request.ImageRequest;
 import com.ph.phbackend.payload.request.RecommendationRequest;
 import com.ph.phbackend.services.NursingRecommendationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -27,9 +21,9 @@ public class NursingRecommendationController {
     public NursingRecommendationController() {
     }
 
-    @PostMapping("/byDiagnose")
-    public ResponseEntity<?> getRecommendationsByDiagnose(@Valid @RequestBody DiagnosesRequest diagnose) {
-        return ResponseEntity.ok(nursingRecommendationService.getRecommendationsByDiagnose(diagnose.getDiagnose()));
+    @GetMapping("/byPatient")
+    public ResponseEntity<?> getRecommendationsByPatient(@Valid long patientId) {
+        return ResponseEntity.ok(nursingRecommendationService.getRecommendationsByPatient(patientId));
     }
 
     @PostMapping("/save")
@@ -37,10 +31,4 @@ public class NursingRecommendationController {
     public ResponseEntity<?> saveRecommendation(@Valid @RequestBody RecommendationRequest recommendation) {
         return ResponseEntity.ok(nursingRecommendationService.saveRecommendation(recommendation));
     }
-
-//    @GetMapping("/setTest")
-//    public ResponseEntity<?> setTest() {
-//        return ResponseEntity.ok(nursingRecommendationService.setTestRecommendation());
-//    }
-
 }
