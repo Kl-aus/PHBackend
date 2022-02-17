@@ -34,11 +34,17 @@ public class Patient {
 
         @JsonIgnore
         @ManyToMany
+        @JoinTable(name = "patient_anamnesis_relation",
+                joinColumns = @JoinColumn(name = "patient_id"),
+                inverseJoinColumns = @JoinColumn(name = "question_id"))
+        private Set<Anamnesis> anamneses = new HashSet<>();
+
+        @JsonIgnore
+        @ManyToMany
         @JoinTable(name = "patient_diagnose_relation",
                 joinColumns = @JoinColumn(name = "patient_id"),
                 inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
         private Set<Diagnose> diagnoses = new HashSet<>();
-
 
         public Patient() {
         }
@@ -107,4 +113,11 @@ public class Patient {
                 this.diagnoses = diagnoses;
         }
 
+        public Set<Anamnesis> getAnamneses() {
+                return anamneses;
+        }
+
+        public void setAnamneses(Set<Anamnesis> anamneses) {
+                this.anamneses = anamneses;
+        }
 }

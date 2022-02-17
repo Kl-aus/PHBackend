@@ -1,7 +1,10 @@
 package com.ph.phbackend.controllers;
+import com.ph.phbackend.payload.request.AnamnesisRequest;
 import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.payload.request.PatientRequest;
+import com.ph.phbackend.repository.AnamnesisRepository;
 import com.ph.phbackend.repository.UserRepository;
+import com.ph.phbackend.services.AnamnesisService;
 import com.ph.phbackend.services.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,10 @@ public class PatientController {
     PatientService patientService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    AnamnesisRepository anamnesisRepository;
+    @Autowired
+    AnamnesisService anamnesisService;
 
 
     @Autowired
@@ -50,5 +57,10 @@ public class PatientController {
     @DeleteMapping("/deleteDiagnoses")
     public void deletePatientDiagnoses(@Valid @RequestBody DiagnosesRequest diagnosesRequest) {
         patientService.deletePatientDiagnoses(diagnosesRequest.getDiagnose(), diagnosesRequest.getSelectedPatientId());
+    }
+
+    @PostMapping("/saveAnamnesis")
+    public ResponseEntity<?> saveAnamnesis(@Valid @RequestBody AnamnesisRequest anamnesisRequest) {
+        return ResponseEntity.ok(patientService.saveAnamnesis(anamnesisRequest));
     }
 }

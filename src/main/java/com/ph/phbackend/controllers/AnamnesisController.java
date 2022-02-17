@@ -18,11 +18,6 @@ public class AnamnesisController {
         this.anamnesisService = anamnesisController;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<?> saveAnamnesis(@Valid @RequestBody AnamnesisRequest anamnesisRequest) {
-        return ResponseEntity.ok(anamnesisService.saveAnamnesis(anamnesisRequest));
-    }
-
     @GetMapping("/getAnamnesis")
     public ResponseEntity<?> getAnamnesis() {
         return ResponseEntity.ok(anamnesisService.getAnamnesis());

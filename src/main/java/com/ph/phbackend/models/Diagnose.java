@@ -11,13 +11,14 @@ public class Diagnose {
     private Long diagnosesId;
     @Column(name = "nursing_diagnoses_nanda", nullable = false)
     private String nursingDiagnosesNanda;
+
+    @Column(name = "nursing_diagnoses_catagory")
+    private String nursingDiagnosesCategory;
+
     @Lob
     @Column(name = "nursing_diagnoses_description")
     private String nursingDiagnosesDescription;
 
-    @ManyToOne
-    @JoinColumn(name="anamnesis_id")
-    private Anamnesis anamnesis;
 
     public Diagnose() {
     }
@@ -27,10 +28,11 @@ public class Diagnose {
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
-    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda, String nursingDiagnosesDescription) {
+    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda, String nursingDiagnosesDescription, String nursingDiagnosesCategory) {
         this.diagnosesId = diagnosesId;
         this.nursingDiagnosesNanda = nursingDiagnosesNanda;
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
+        this.nursingDiagnosesCategory = nursingDiagnosesCategory;
     }
 
     public String getNursingDiagnosesNanda() {
@@ -49,6 +51,14 @@ public class Diagnose {
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
+    public String getNursingDiagnosesCategory() {
+        return nursingDiagnosesCategory;
+    }
+
+    public void setNursingDiagnosesCategory(String nursingDiagnosesCategory) {
+        this.nursingDiagnosesCategory = nursingDiagnosesCategory;
+    }
+
     public Long getDiagnosesId() {
         return diagnosesId;
     }
@@ -59,12 +69,10 @@ public class Diagnose {
 
     @Override
     public boolean equals(Object o) {
-
         if (o == this) return true;
         if (!(o instanceof Diagnose)) {
             return false;
         }
-
         Diagnose diagnose = (Diagnose) o;
         return diagnosesId == diagnose.diagnosesId &&
                 Objects.equals(nursingDiagnosesNanda, diagnose.nursingDiagnosesNanda);

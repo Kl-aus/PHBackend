@@ -81,19 +81,6 @@ public class NursingRecommendationService {
                         return null;
                     }
                 }
-//                for (int i = 0; i < resultList.size(); i++) {
-//                    long recommendationId = Long.parseLong(resultList.get(i)[0].toString());
-//                    Optional<NursingRecommendation> nursingRecommendation = nursingRecommendationRepository.findById(recommendationId);
-//                    Hibernate.initialize(nursingRecommendation);
-//
-//                   if (nursingRecommendation.isPresent()) {
-//                        measures.addAll(nursingRecommendation.get().getNursingMeasureMust()); // get all measures from recommendation
-//                        Hibernate.initialize(measures);
-//                    } else {
-//                        System.out.println("no recommendations found");
-//                        return null;
-//                    }
-//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

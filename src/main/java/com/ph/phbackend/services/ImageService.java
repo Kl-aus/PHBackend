@@ -23,8 +23,8 @@ import java.util.Set;
 
 @Service
 public class ImageService {
-    private static final String UPLOAD_FOLDER = "/home/phBackend/images/";
-//    private static final String UPLOAD_FOLDER = "C:\\Users\\Klaus\\Desktop\\images\\";
+//    private static final String UPLOAD_FOLDER = "/home/phBackend/images/";
+    private static final String UPLOAD_FOLDER = "C:\\Users\\Klaus\\Desktop\\images\\";
 
     private ImageRepository imageRepository;
     private NursingMeasureRepository nursingMeasureRepository;

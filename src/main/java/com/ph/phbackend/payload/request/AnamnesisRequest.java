@@ -2,24 +2,26 @@ package com.ph.phbackend.payload.request;
 
 import com.ph.phbackend.models.Anamnesis;
 
+import java.util.Set;
+
 public class AnamnesisRequest {
 
     private long patientId;
-    private Anamnesis[] anamnesis;
+    private Set<Anamnesis> anamnesis;
 
     public AnamnesisRequest() {
     }
 
-    public AnamnesisRequest(Long anamnesisId, String anamnesisCategory, String question, long patientId, Anamnesis anamnesis[]) {
+    public AnamnesisRequest(Long anamnesisId, String anamnesisCategory, String question, long patientId, Set<Anamnesis> anamnesis) {
         this.patientId = patientId;
         this.anamnesis = anamnesis;
     }
 
-    public Anamnesis[] getAnamnesis() {
+    public Set<Anamnesis> getAnamnesis() {
         return anamnesis;
     }
 
-    public void setAnamnesis(Anamnesis[] anamnesis) {
+    public void setAnamnesis(Set<Anamnesis> anamnesis) {
         this.anamnesis = anamnesis;
     }
 

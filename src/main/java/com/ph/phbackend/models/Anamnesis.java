@@ -2,6 +2,7 @@ package com.ph.phbackend.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -10,28 +11,33 @@ import java.util.Set;
 public class Anamnesis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "anamnesis_id")
+    @Column(name = "question_id")
     private Long questionId;
     private String anamnesisCategory;
     private String question;
 
-    @ManyToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name="patient_id")
-    private Patient patient;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "anamnesis_patient_relation",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id"))
+    private Set<Patient> patients = new HashSet<>();
 
     @JsonIgnore
-    @OneToMany
-    @JoinColumn(name="diagnoses_id")
-    private Set<Diagnose> diagnoses;
+    @ManyToMany
+    @JoinTable(name = "anamnesis_diagnoses_relation",
+            joinColumns = @JoinColumn(name = "question_id"),
+            inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
+    private Set<Diagnose> diagnoses = new HashSet<>();
 
     public Anamnesis() {
     }
 
-    public Anamnesis(Long questionId, String question, Patient patient, Set<Diagnose> diagnoses) {
+    public Anamnesis(Long questionId, String question, Set<Patient> patients, Set<Diagnose> diagnoses) {
         this.questionId = questionId;
         this.question = question;
         this.diagnoses = diagnoses;
-        this.patient = patient;
+        this.patients = patients;
     }
 
     public String getAnamnesisCategory() {
@@ -50,12 +56,12 @@ public class Anamnesis {
         this.questionId = anamnesisId;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public Set<Patient> getPatients() {
+        return patients;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
     }
 
     public Set<Diagnose> getDiagnoses() {

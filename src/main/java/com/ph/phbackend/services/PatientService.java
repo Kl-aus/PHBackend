@@ -1,33 +1,58 @@
 package com.ph.phbackend.services;
 
-import com.ph.phbackend.models.Diagnose;
-import com.ph.phbackend.models.Patient;
-import com.ph.phbackend.models.User;
+import com.ph.phbackend.models.*;
+import com.ph.phbackend.payload.request.AnamnesisRequest;
 import com.ph.phbackend.payload.request.DiagnosesRequest;
 import com.ph.phbackend.payload.request.PatientRequest;
+import com.ph.phbackend.repository.AnamnesisRepository;
+import com.ph.phbackend.repository.DiagnoseRepository;
 import com.ph.phbackend.repository.PatientRepository;
 import com.ph.phbackend.repository.UserRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.*;
 
 @Service
 public class PatientService {
+    @PersistenceContext(unitName = "entityManagerFactory")
+    private EntityManager entityManager;
     private PatientRepository patientRepository;
     private UserRepository userRepository;
+    private AnamnesisRepository anamnesisRepository;
+    private AnamnesisService anamnesisService;
+    private DiagnoseService diagnoseService;
+    private DiagnoseRepository diagnoseRepository;
+    LocalContainerEntityManagerFactoryBean transactionManager;
+
 
 
     @Autowired
-    public PatientService(PatientRepository patientRepository, UserRepository userRepository) {
+    public PatientService(PatientRepository patientRepository,
+                          UserRepository userRepository,
+                          AnamnesisRepository anamnesisRepository,
+                          AnamnesisService anamnesisService,
+                          DiagnoseService diagnoseService,
+                          DiagnoseRepository diagnoseRepository
+//                        LocalContainerEntityManagerFactoryBean transactionManager,
+
+    ) {
         this.patientRepository = patientRepository;
         this.userRepository = userRepository;
+        this.anamnesisRepository = anamnesisRepository;
+        this.anamnesisService = anamnesisService;
+        this.diagnoseService = diagnoseService;
+        this.diagnoseRepository = diagnoseRepository;
     }
 
     @Transactional
@@ -99,19 +124,49 @@ public class PatientService {
             patientRepository.delete(patient.get());
         }
     }
+
     @Transactional
     public void deletePatientDiagnoses(Set<Diagnose> diagnoses, long patientId) {
-        System.out.println("DeletePatientDiagnoses();");
         Patient patient = patientRepository.getById(patientId);
         Set<Diagnose> patientDiagnoses = patient.getDiagnoses();
-        System.out.println("PATIENTENDIAGNOSEN: " + patientDiagnoses.toString());
-        System.out.println("LÖSCHDIAGNOSEN: " + diagnoses.toString());
-
         patientDiagnoses.removeAll(diagnoses);
-        System.out.println("NACH LÖSCHEN: " + patientDiagnoses.toString());
         patient.setDiagnoses(patientDiagnoses);
         patientRepository.save(patient);
     }
 
+    @Transactional
+    public Set<Anamnesis> saveAnamnesis(AnamnesisRequest anamnesisRequest) {
+        Patient patient = this.patientRepository.getById(anamnesisRequest.getPatientId());
+        Set<Anamnesis> anamneses = anamnesisRequest.getAnamnesis();
+        patient.setAnamneses(anamneses);
+        Set<Diagnose> patientDiagnoses = new HashSet<>();
+        List<Long> questionIdlist = new ArrayList<>();
+        if (anamneses != null) {
+            for (Anamnesis anamnesis : anamneses) {
+                questionIdlist.add(anamnesis.getQuestionId());
+            }
+        }
+        String q = "select distinct diagnoses_id from anamnesis_diagnoses_relation where question_id in(?1)";
+        Query query = entityManager.createNativeQuery(q);
+        query.setParameter(1, questionIdlist);
+        try {
+            List<Object[]> resultList = query.getResultList();
+            for (int i = 0; i < resultList.size(); i++) {
+                long diagnosesId = Long.parseLong(String.valueOf(resultList.get(i)));
+                Optional<Diagnose> diagnose = diagnoseRepository.findById(diagnosesId);
+                if (diagnose.isPresent()) {
+                    patientDiagnoses.add(diagnose.get());
+                } else {
+                    System.out.println("diagnoses not found");
+                    return null;
+                }
+            }
+            patient.setDiagnoses(patientDiagnoses);
+            patientRepository.save(patient);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        return anamneses;
+    }
 }
