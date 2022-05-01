@@ -45,6 +45,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private Set<Patient> patients = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    private Set<Ratings> ratingsSet = new HashSet<>();
+
     public User() {
     }
 

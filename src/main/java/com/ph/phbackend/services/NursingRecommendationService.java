@@ -100,7 +100,7 @@ public class NursingRecommendationService {
         thisDiagnose.add(diagnose);
 
         NursingRecommendation thisRecommendation = new NursingRecommendation();
-        thisRecommendation.setAuthor(recommendation.getAuthor());
+        thisRecommendation.setSources(recommendation.getAuthor());
         thisRecommendation.setName(recommendation.getName());
         thisRecommendation.setDiagnosesMust(thisDiagnose);
         Set<NursingMeasure> nursingMeasures = new HashSet<>();

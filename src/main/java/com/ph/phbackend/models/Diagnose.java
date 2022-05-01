@@ -9,38 +9,37 @@ public class Diagnose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diagnoses_id")
     private Long diagnosesId;
-    @Column(name = "nursing_diagnoses_nanda", nullable = false)
-    private String nursingDiagnosesNanda;
+    @Column(name = "nursing_diagnoses", nullable = false)
+    private String nursingDiagnoses;
 
-    @Column(name = "nursing_diagnoses_catagory")
+    @Column(name = "nursing_diagnoses_category")
     private String nursingDiagnosesCategory;
 
     @Lob
     @Column(name = "nursing_diagnoses_description")
     private String nursingDiagnosesDescription;
 
-
     public Diagnose() {
     }
 
-    public Diagnose(String nursingDiagnosesNanda, String nursingDiagnosesDescription) {
-        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
+    public Diagnose(String nursingDiagnoses, String nursingDiagnosesDescription) {
+        this.nursingDiagnoses = nursingDiagnoses;
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
     }
 
-    public Diagnose(Long diagnosesId, String nursingDiagnosesNanda, String nursingDiagnosesDescription, String nursingDiagnosesCategory) {
+    public Diagnose(Long diagnosesId, String nursingDiagnoses, String nursingDiagnosesDescription, String nursingDiagnosesCategory) {
         this.diagnosesId = diagnosesId;
-        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
+        this.nursingDiagnoses = nursingDiagnoses;
         this.nursingDiagnosesDescription = nursingDiagnosesDescription;
         this.nursingDiagnosesCategory = nursingDiagnosesCategory;
     }
 
-    public String getNursingDiagnosesNanda() {
-        return nursingDiagnosesNanda;
+    public String getNursingDiagnoses() {
+        return nursingDiagnoses;
     }
 
-    public void setNursingDiagnosesNanda(String nursing_diagnoses_nanda) {
-        this.nursingDiagnosesNanda = nursing_diagnoses_nanda;
+    public void setNursingDiagnoses(String nursing_diagnoses_nanda) {
+        this.nursingDiagnoses = nursing_diagnoses_nanda;
     }
 
     public String getNursingDiagnosesDescription() {
@@ -75,13 +74,11 @@ public class Diagnose {
         }
         Diagnose diagnose = (Diagnose) o;
         return diagnosesId == diagnose.diagnosesId &&
-                Objects.equals(nursingDiagnosesNanda, diagnose.nursingDiagnosesNanda);
+                Objects.equals(nursingDiagnoses, diagnose.nursingDiagnoses);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(diagnosesId, nursingDiagnosesNanda);
+        return Objects.hash(diagnosesId, nursingDiagnoses);
     }
-
-
 }

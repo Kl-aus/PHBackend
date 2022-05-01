@@ -1,7 +1,4 @@
 package com.ph.phbackend.models;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,7 +12,7 @@ public class NursingRecommendation {
     @Column(name = "recommendation_id")
     private Long recommendationId;
     private String name;
-    private String author;
+    private String sources;
 
     @ManyToMany
     @JoinTable(name = "nursing_diagnose",
@@ -41,17 +38,36 @@ public class NursingRecommendation {
             inverseJoinColumns = @JoinColumn(name = "nursing_measure_id"))
     private Set<NursingMeasure> nursingMeasureMust = new HashSet<>();
 
+    @OneToMany(mappedBy = "nursingRecommendation")
+    private Set<Ratings> ratingsSet = new HashSet<>();
     public NursingRecommendation() {
+
     }
 
-    public NursingRecommendation(String name, String author, Set<Diagnose> nursingDiagnose,
+    public NursingRecommendation(String name, String sources, Set<Diagnose> nursingDiagnose,
                                  Set<NursingMeasure> nursingMeasureMust, Set<NursingMeasure> nursingMeasureMustNot) {
         this.name = name;
-        this.author = author;
+        this.sources = sources;
         this.nursingDiagnose = nursingDiagnose;
 //      this.diagnoseMustNot = diagnoseMustNot;
         this.nursingMeasureMustNot = nursingMeasureMustNot;
         this.nursingMeasureMust = nursingMeasureMust;
+    }
+
+    public Long getRecommendationId() {
+        return recommendationId;
+    }
+
+    public void setRecommendationId(Long recommendationId) {
+        this.recommendationId = recommendationId;
+    }
+
+    public Set<Diagnose> getNursingDiagnose() {
+        return nursingDiagnose;
+    }
+
+    public void setNursingDiagnose(Set<Diagnose> nursingDiagnose) {
+        this.nursingDiagnose = nursingDiagnose;
     }
 
     public Long getRecHelperId() {
@@ -70,12 +86,12 @@ public class NursingRecommendation {
         this.name = name;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getSources() {
+        return sources;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setSources(String sources) {
+        this.sources = sources;
     }
 
     public Collection<Diagnose> getDiagnosesMust() {
