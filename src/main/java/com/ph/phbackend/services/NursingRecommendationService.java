@@ -1,14 +1,8 @@
 package com.ph.phbackend.services;
 
-import com.ph.phbackend.models.NursingMeasure;
-import com.ph.phbackend.models.Diagnose;
-import com.ph.phbackend.models.NursingRecommendation;
-import com.ph.phbackend.models.Patient;
+import com.ph.phbackend.models.*;
 import com.ph.phbackend.payload.request.RecommendationRequest;
-import com.ph.phbackend.repository.NursingMeasureRepository;
-import com.ph.phbackend.repository.DiagnoseRepository;
-import com.ph.phbackend.repository.NursingRecommendationRepository;
-import com.ph.phbackend.repository.PatientRepository;
+import com.ph.phbackend.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -28,18 +22,24 @@ public class NursingRecommendationService {
     DiagnoseRepository diagnoseRepository;
     NursingMeasureRepository nursingMeasureRepository;
     PatientRepository patientRepository;
+    RatingsRepository ratingsRepository;
+    UserRepository userRepository;
 
     @Autowired
     public NursingRecommendationService(NursingRecommendationRepository nursingRecommendationRepository,
                                         DiagnoseRepository diagnoseRepository,
                                         NursingMeasureRepository nursingMeasureRepository,
                                         PatientRepository patientRepository,
-                                        LocalContainerEntityManagerFactoryBean transactionManager) {
+                                        LocalContainerEntityManagerFactoryBean transactionManager,
+                                        RatingsRepository ratingsRepository,
+                                        UserRepository userRepository) {
         this.nursingRecommendationRepository = nursingRecommendationRepository;
         this.diagnoseRepository = diagnoseRepository;
         this.nursingMeasureRepository = nursingMeasureRepository;
         this.transactionManager = transactionManager;
         this.patientRepository = patientRepository;
+        this.ratingsRepository = ratingsRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -93,25 +93,57 @@ public class NursingRecommendationService {
 
     @Transactional
     public Object saveRecommendation(RecommendationRequest recommendation) {
-        this.nursingMeasureRepository.save(recommendation.getNursingMeasure());
-        Diagnose diagnose = new Diagnose(recommendation.getNursingDiagnosesNanda(), recommendation.getNursingDiagnosesDescription());
-        this.diagnoseRepository.save(diagnose);
-        Set<Diagnose> thisDiagnose = new HashSet<>();
-        thisDiagnose.add(diagnose);
-
         NursingRecommendation thisRecommendation = new NursingRecommendation();
+        Set<NursingMeasure> nursingMeasures = new HashSet<>();
+        Set<Diagnose> diagnoses = new HashSet<>();
+
+        if(recommendation.getNursingMeasure().getRecommendationId() < 1) {
+            this.nursingMeasureRepository.save(recommendation.getNursingMeasure());
+            nursingMeasures.add(recommendation.getNursingMeasure());
+        } else {
+            Optional<NursingMeasure> nursingMeasure = nursingMeasureRepository.findById(recommendation.getNursingMeasure().getRecommendationId());
+            if (nursingMeasure.isPresent()) {
+                Hibernate.initialize(nursingMeasure.get().getImages());
+                nursingMeasures.add(nursingMeasure.get());
+            } else {
+                System.out.println("nursing measure not found");
+                return null;
+            }
+        }
+
+        if(recommendation.getDiagnose().getDiagnosesId() < 1) {
+            this.diagnoseRepository.save(recommendation.getDiagnose());
+            diagnoses.add(recommendation.getDiagnose());
+        } else {
+            Optional<Diagnose> diagnose = diagnoseRepository.findById(recommendation.getDiagnose().getDiagnosesId());
+            if (diagnose.isPresent()) {
+                Hibernate.initialize(diagnose.get());
+                diagnoses.add(diagnose.get());
+            } else {
+                System.out.println("diagnose not found");
+                return null;
+            }
+        }
+
+        Optional<User> user = this.userRepository.findById(recommendation.getUserId());
+        if (user.isPresent()) {
+            this.ratingsRepository.save(new Ratings(0, user.get(), thisRecommendation));
+        } else {
+            System.out.println("user not found");
+            return null;
+        }
+
+
         thisRecommendation.setSources(recommendation.getAuthor());
         thisRecommendation.setName(recommendation.getName());
-        thisRecommendation.setDiagnosesMust(thisDiagnose);
-        Set<NursingMeasure> nursingMeasures = new HashSet<>();
-        nursingMeasures.add(recommendation.getNursingMeasure());
+        thisRecommendation.setDiagnosesMust(diagnoses);
         thisRecommendation.setNursingMeasureMust(nursingMeasures);
-        //thisRecommendation.setNursingMeasureMustNot();
 
         try {
             this.nursingRecommendationRepository.save(thisRecommendation);
             return thisRecommendation;
         } catch (Exception e) {
+            System.out.println("saving recommendation failed");
             e.printStackTrace();
             return null;
         }

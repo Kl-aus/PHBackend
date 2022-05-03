@@ -26,11 +26,11 @@ public class NursingRecommendation {
 //            inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
 //    private Set<Diagnose> diagnoseMustNot = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(name = "nursing_measure_must_not",
-            joinColumns = @JoinColumn(name = "recommendation_id"),
-            inverseJoinColumns = @JoinColumn(name = "nursing_measure_id"))
-    private Set<NursingMeasure> nursingMeasureMustNot = new HashSet<>();
+//    @ManyToMany
+//    @JoinTable(name = "nursing_measure_must_not",
+//            joinColumns = @JoinColumn(name = "recommendation_id"),
+//            inverseJoinColumns = @JoinColumn(name = "nursing_measure_id"))
+//    private Set<NursingMeasure> nursingMeasureMustNot = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "nursing_measure_must",
@@ -41,16 +41,15 @@ public class NursingRecommendation {
     @OneToMany(mappedBy = "nursingRecommendation")
     private Set<Ratings> ratingsSet = new HashSet<>();
     public NursingRecommendation() {
-
     }
 
     public NursingRecommendation(String name, String sources, Set<Diagnose> nursingDiagnose,
-                                 Set<NursingMeasure> nursingMeasureMust, Set<NursingMeasure> nursingMeasureMustNot) {
+                                 Set<NursingMeasure> nursingMeasureMust) {
         this.name = name;
         this.sources = sources;
         this.nursingDiagnose = nursingDiagnose;
 //      this.diagnoseMustNot = diagnoseMustNot;
-        this.nursingMeasureMustNot = nursingMeasureMustNot;
+//      this.nursingMeasureMustNot = nursingMeasureMustNot;
         this.nursingMeasureMust = nursingMeasureMust;
     }
 
@@ -69,14 +68,14 @@ public class NursingRecommendation {
     public void setNursingDiagnose(Set<Diagnose> nursingDiagnose) {
         this.nursingDiagnose = nursingDiagnose;
     }
-
-    public Long getRecHelperId() {
-        return recommendationId;
-    }
-
-    public void setRecHelperId(Long recHelperId) {
-        this.recommendationId = recHelperId;
-    }
+//
+//    public Long getRecHelperId() {
+//        return recommendationId;
+//    }
+//
+//    public void setRecHelperId(Long recHelperId) {
+//        this.recommendationId = recHelperId;
+//    }
 
     public String getName() {
         return name;
@@ -109,14 +108,14 @@ public class NursingRecommendation {
 //    public void setDiagnosesMustNot(Set<Diagnose> diagnoseMustNot) {
 //        this.diagnoseMustNot = diagnoseMustNot;
 //    }
-
-    public Set<NursingMeasure> getNursingMeasureMustNot() {
-        return nursingMeasureMustNot;
-    }
-
-    public void setNursingMeasureMustNot(Set<NursingMeasure> recommendationsMustNot) {
-        this.nursingMeasureMustNot = recommendationsMustNot;
-    }
+//
+//    public Set<NursingMeasure> getNursingMeasureMustNot() {
+//        return nursingMeasureMustNot;
+//    }
+//
+//    public void setNursingMeasureMustNot(Set<NursingMeasure> recommendationsMustNot) {
+//        this.nursingMeasureMustNot = recommendationsMustNot;
+//    }
 
     public Set<NursingMeasure> getNursingMeasureMust() {
         return nursingMeasureMust;

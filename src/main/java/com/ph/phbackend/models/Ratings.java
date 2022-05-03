@@ -9,14 +9,14 @@ import java.util.Set;
 @Table(name = "ratings")
 
 public class Ratings {
-    public Ratings(int rating, User user, NursingRecommendation nursingRecommendation) {
+    public Ratings(Integer rating, User user, NursingRecommendation nursingRecommendation) {
         this.rating = rating;
         this.user = user;
         this.nursingRecommendation = nursingRecommendation;
     }
 
-    @Column(name = "rating")
-    int rating;
+    @Column(columnDefinition = "integer default '0'")
+    Integer rating;
 
     @Id
     @ManyToOne

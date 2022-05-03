@@ -11,4 +11,5 @@ import java.util.Optional;
 
 public interface NursingMeasureRepository extends JpaRepository<NursingMeasure, Long> {
     Optional<NursingMeasure> findNursingMeasureByCareRecommendationTitle(String string);
+
 }

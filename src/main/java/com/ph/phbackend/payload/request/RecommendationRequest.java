@@ -1,28 +1,35 @@
 package com.ph.phbackend.payload.request;
 
+import com.ph.phbackend.models.Diagnose;
 import com.ph.phbackend.models.NursingMeasure;
-
-import java.util.Set;
 
 public class RecommendationRequest {
 
     private String name;
     private String author;
+    private Long userId;
 
-    private String nursingDiagnosesNanda;
-    private String nursingDiagnosesDescription;
+    private Diagnose diagnose;
 
     private NursingMeasure nursingMeasure;
 
     public RecommendationRequest() {
     }
 
-    public RecommendationRequest(String name, String author, String nursingDiagnosesNanda, String nursingDiagnosesDescription, NursingMeasure nursingMeasure) {
+    public RecommendationRequest(String name, String author, Diagnose diagnose, NursingMeasure nursingMeasure, Long userId) {
+        this.userId = userId;
         this.name = name;
         this.author = author;
-        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
-        this.nursingDiagnosesDescription = nursingDiagnosesDescription;
+        this.diagnose = diagnose;
         this.nursingMeasure = nursingMeasure;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -41,20 +48,12 @@ public class RecommendationRequest {
         this.author = author;
     }
 
-    public String getNursingDiagnosesNanda() {
-        return nursingDiagnosesNanda;
+    public Diagnose getDiagnose() {
+        return diagnose;
     }
 
-    public void setNursingDiagnosesNanda(String nursingDiagnosesNanda) {
-        this.nursingDiagnosesNanda = nursingDiagnosesNanda;
-    }
-
-    public String getNursingDiagnosesDescription() {
-        return nursingDiagnosesDescription;
-    }
-
-    public void setNursingDiagnosesDescription(String nursingDiagnosesDescription) {
-        this.nursingDiagnosesDescription = nursingDiagnosesDescription;
+    public void setDiagnose(Diagnose diagnose) {
+        this.diagnose = diagnose;
     }
 
     public NursingMeasure getNursingMeasure() {

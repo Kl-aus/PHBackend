@@ -27,7 +27,7 @@ public class NursingMeasure {
         this.nursingMeasureCategory = nursingMeasureCategory;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "measure_image_relation",
             joinColumns = @JoinColumn(name = "nursing_measure_id"),
             inverseJoinColumns = @JoinColumn(name = "image_id"))
