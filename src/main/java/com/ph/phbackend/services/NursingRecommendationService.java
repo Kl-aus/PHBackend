@@ -2,6 +2,7 @@ package com.ph.phbackend.services;
 
 import com.ph.phbackend.models.*;
 import com.ph.phbackend.payload.request.RecommendationRequest;
+import com.ph.phbackend.payload.response.RecommendationResponse;
 import com.ph.phbackend.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,8 +99,7 @@ public class NursingRecommendationService {
         Set<Diagnose> diagnoses = new HashSet<>();
 
         if(recommendation.getNursingMeasure().getRecommendationId() < 1) {
-            this.nursingMeasureRepository.save(recommendation.getNursingMeasure());
-            nursingMeasures.add(recommendation.getNursingMeasure());
+            nursingMeasures.add( this.nursingMeasureRepository.save(recommendation.getNursingMeasure()));
         } else {
             Optional<NursingMeasure> nursingMeasure = nursingMeasureRepository.findById(recommendation.getNursingMeasure().getRecommendationId());
             if (nursingMeasure.isPresent()) {
@@ -112,8 +112,7 @@ public class NursingRecommendationService {
         }
 
         if(recommendation.getDiagnose().getDiagnosesId() < 1) {
-            this.diagnoseRepository.save(recommendation.getDiagnose());
-            diagnoses.add(recommendation.getDiagnose());
+            diagnoses.add(this.diagnoseRepository.save(recommendation.getDiagnose()));
         } else {
             Optional<Diagnose> diagnose = diagnoseRepository.findById(recommendation.getDiagnose().getDiagnosesId());
             if (diagnose.isPresent()) {
@@ -125,25 +124,73 @@ public class NursingRecommendationService {
             }
         }
 
-        Optional<User> user = this.userRepository.findById(recommendation.getUserId());
-        if (user.isPresent()) {
-            this.ratingsRepository.save(new Ratings(0, user.get(), thisRecommendation));
-        } else {
-            System.out.println("user not found");
-            return null;
-        }
-
-
         thisRecommendation.setSources(recommendation.getAuthor());
         thisRecommendation.setName(recommendation.getName());
         thisRecommendation.setDiagnosesMust(diagnoses);
         thisRecommendation.setNursingMeasureMust(nursingMeasures);
 
         try {
-            this.nursingRecommendationRepository.save(thisRecommendation);
-            return thisRecommendation;
+            NursingRecommendation rec = this.nursingRecommendationRepository.save(thisRecommendation);
+            Optional<User> user = this.userRepository.findById(recommendation.getUserId());
+            if (user.isPresent()) {
+                this.ratingsRepository.save(new Ratings(0L, user.get().getUserId(), rec.getRecommendationId()));
+            } else {
+                System.out.println("user not found");
+                return null;
+            }
+            return rec;
         } catch (Exception e) {
             System.out.println("saving recommendation failed");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Transactional
+    public Set<RecommendationResponse> getRecommendations() {
+        Set<RecommendationResponse> recommendationResponses = new HashSet<>();
+        List<Long> ratings = new ArrayList<>();
+
+        String q = "select nr.recommendation_id, nr.sources, nr.name, nm.nursing_measure_id, nm.nursing_measure_title, d.diagnoses_id, d.nursing_diagnoses from nursing_recommendation nr\n" +
+                "inner join nursing_measure_must nmm on nr.recommendation_id = nmm.recommendation_id\n" +
+                "inner join nursing_measure nm on nmm.nursing_measure_id = nm.nursing_measure_id \n" +
+                "inner join nursing_diagnose nd on nd.recommendation_id = nr.recommendation_id\n" +
+                "inner join diagnose d on nd.diagnoses_id = d.diagnoses_id";
+
+        String q2 = "select rating from ratings where nursingRecommendation = (?1)";
+
+        Query recQuery = entityManager.createNativeQuery(q);
+        Query ratingsQuery = entityManager.createNativeQuery(q2);
+
+        try {
+            List<Object[]> recList = recQuery.getResultList();
+            for(Object[] recObject : recList) {
+                RecommendationResponse response = new RecommendationResponse();
+                response.setRecId(((BigInteger) recObject[0]).longValue());
+
+                ratingsQuery.setParameter(1, ((BigInteger) recObject[0]).longValue());
+                List<Object> ratingsList = ratingsQuery.getResultList();
+                for(Object rating : ratingsList) {
+                    ratings.add(((BigInteger) rating).longValue());
+                }
+                OptionalDouble average = ratings.stream().mapToDouble(a->a).average();
+                if (average.isPresent()) {
+                    double d = Math.round(average.getAsDouble()*10)/10.0;
+                    response.setRating(d);
+                } else {
+                    response.setRating(0.0);
+                }
+
+                response.setSources((String) recObject[1]);
+                response.setName((String) recObject[2]);
+                response.setMeasureId(((BigInteger) recObject[3]).longValue());
+                response.setMeasureTitle((String) recObject[4]);
+                response.setDiagnoseId(((BigInteger) recObject[5]).longValue());
+                response.setDiagnoseTitle((String) recObject[6]);
+                recommendationResponses.add(response);
+            }
+            return  recommendationResponses;
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

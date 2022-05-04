@@ -20,6 +20,11 @@ public class NursingRecommendationController {
 
     public NursingRecommendationController() {
     }
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ResponseEntity<?> getRecommendations() {
+        return ResponseEntity.ok(nursingRecommendationService.getRecommendations());
+    }
 
     @GetMapping("/byPatient")
     public ResponseEntity<?> getRecommendationsByPatient(@Valid long patientId) {

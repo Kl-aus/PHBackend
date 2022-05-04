@@ -20,18 +20,6 @@ public class NursingRecommendation {
         inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
     private Set<Diagnose> nursingDiagnose;
 
-//    @ManyToMany
-//    @JoinTable(name = "diagnose_must_not",
-//            joinColumns = @JoinColumn(name = "rec_helper_id"),
-//            inverseJoinColumns = @JoinColumn(name = "diagnoses_id"))
-//    private Set<Diagnose> diagnoseMustNot = new HashSet<>();
-
-//    @ManyToMany
-//    @JoinTable(name = "nursing_measure_must_not",
-//            joinColumns = @JoinColumn(name = "recommendation_id"),
-//            inverseJoinColumns = @JoinColumn(name = "nursing_measure_id"))
-//    private Set<NursingMeasure> nursingMeasureMustNot = new HashSet<>();
-
     @ManyToMany
     @JoinTable(name = "nursing_measure_must",
             joinColumns = @JoinColumn(name = "recommendation_id"),
@@ -101,7 +89,15 @@ public class NursingRecommendation {
         this.nursingDiagnose = diagnoseMust;
     }
 
-//    public Set<Diagnose> getDiagnosesMustNot() {
+    public Set<Ratings> getRatingsSet() {
+        return ratingsSet;
+    }
+
+    public void setRatingsSet(Set<Ratings> ratingsSet) {
+        this.ratingsSet = ratingsSet;
+    }
+
+    //    public Set<Diagnose> getDiagnosesMustNot() {
 //        return diagnoseMustNot;
 //    }
 //
@@ -123,5 +119,17 @@ public class NursingRecommendation {
 
     public void setNursingMeasureMust(Set<NursingMeasure> recommendationsMust) {
         this.nursingMeasureMust = recommendationsMust;
+    }
+
+    @Override
+    public String toString() {
+        return "NursingRecommendation{" +
+                "recommendationId=" + recommendationId +
+                ", name='" + name + '\'' +
+                ", sources='" + sources + '\'' +
+                ", nursingDiagnose=" + nursingDiagnose +
+                ", nursingMeasureMust=" + nursingMeasureMust +
+                ", ratingsSet=" + ratingsSet +
+                '}';
     }
 }

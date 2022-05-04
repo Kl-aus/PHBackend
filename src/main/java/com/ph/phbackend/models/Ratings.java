@@ -1,8 +1,6 @@
 package com.ph.phbackend.models;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @IdClass(RatingsId.class)
@@ -15,8 +13,8 @@ public class Ratings {
         this.nursingRecommendation = nursingRecommendation;
     }
 
-    @Column(columnDefinition = "integer default '0'")
-    Integer rating;
+    @Column(columnDefinition = "bigint default 0")
+    Long rating;
 
     @Id
     @ManyToOne
@@ -26,14 +24,13 @@ public class Ratings {
     private NursingRecommendation nursingRecommendation;
 
     public Ratings() {
-
     }
 
-    public int getRatings() {
+    public Long getRatings() {
         return rating;
     }
 
-    public void setRatings(int ratings) {
+    public void setRatings(Long ratings) {
         this.rating = ratings;
     }
 }

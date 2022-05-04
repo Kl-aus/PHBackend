@@ -8,19 +8,19 @@ public class RatingsId implements Serializable {
     public RatingsId() {
     }
 
-    public User getUser() {
+    public Long getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Long user) {
         this.user = user;
     }
 
-    public NursingRecommendation getNursingRecommendation() {
+    public Long getNursingRecommendation() {
         return nursingRecommendation;
     }
 
-    public void setNursingRecommendation(NursingRecommendation nursingRecommendation) {
+    public void setNursingRecommendation(Long nursingRecommendation) {
         this.nursingRecommendation = nursingRecommendation;
     }
 }

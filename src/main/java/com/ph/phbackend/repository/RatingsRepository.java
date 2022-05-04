@@ -5,11 +5,10 @@ import com.ph.phbackend.models.RatingsId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RatingsRepository extends JpaRepository<Ratings, RatingsId> {
-    @Override
-    Optional<Ratings> findById(RatingsId ratingsId);
+public interface RatingsRepository extends JpaRepository<Ratings, Long> {
 
 }
